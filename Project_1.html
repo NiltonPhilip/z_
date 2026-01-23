@@ -55,19 +55,91 @@
          }
 
           .topbar__inner{
-           height: 72px;
-           display: flex;
-           align-items: center;
-           justify-content: space-between;
-           gap: 20px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+          } 
+
+          .topbar__actions{
+            display: flex;
+            align-items: center;
+            gap: 12px;
           }
+         /* Botão hambúrguer (escondido no desktop) */
+           .hamburger{
+              display: none;
+              width: 42px;
+              height: 40px;
+              border-radius: 12px;
+              border: 1px solid var(--border);
+             background: rgba(255,255,255,0.03);
+             cursor: pointer;
+              padding: 10px;
+           }
+
+           .hamburguer span{
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: rgba(232,232,240,0.85);
+            border-radius: 999px;
+            margin: 5px 0;
+            transition: 160ms ease;
+           }
+
+           /* Menu mobile (dropdown) */
+           .mobile-nav{
+            display: none;
+            border-top: 1px solid var(--border);
+            padding: 10px 0 14px;
+           }
+
+           mobile-nav a{
+            display: block;
+            padding: 12px 6px;
+            margin: 0 6px;
+            border-radius: 10px;
+            color: var(--muted);
+            font-size: 14px;
+            transition: 120ms ease;
+           } 
+
+        .mobile-nav a:hover{
+            color: var(--text);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .mobile-nav a.is-active{
+            color: var(--text);
+            background: rgba(109,66,255,0.10);
+            border: 1px solid rgba(109,66,255,0.35);
+        }
+
+        /* Estado aberto */
+         .topbar.is-open .mobile-nav{
+            display: block;
+        }
+
+        /* Animação do hambúrguer quando aberto */
+           .topbar.is-open .hamburger span:nth-child(1){
+             transform: translateY(7px) rotate(45deg);
+        }
+
+        .topbar.is-open .hamburger span:nth-child(2){
+            opacity: 0;
+        }
+        .topbar.is-open .hamburger span:nth-child(3){
+           transform: translateY(-7px) rotate(-45deg);
+        }
 
           .brand{
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-weight: 700;
-          letter-spacing: 0.2px;
+           display: flex;
+           align-items: center;
+           gap: 10px;
+           font-weight: 700;
+           letter-spacing: 0.2px;
          }
 
          .brand__logo{
@@ -330,7 +402,9 @@
       .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .hero__content{ padding: 34px 26px 22px; }
       .hero__title{ font-size: 34px; }
-      .nav{ display: none; }
+
+      .nav{ display: none; } /*menu desktop some*/
+      .hamburger{ display: inline-flex; align-items: center; justify-content: center; } /* hambúrguer aparece */
     }
     @media (max-width: 620px){
       .grid{ grid-template-columns: 1fr; }
@@ -357,9 +431,25 @@
           <a href="#">Games</a>
         </nav>
 
+        <div class="topbar__actions">
+  <button class="hamburger" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
         <a class="account-btn" href="#">Minha conta</a>
             </div>
         </div>
+
+        <nav id="mobileMenu" class="mobile-nav" aria-label="Menu mobile">
+  <a href="#">Home</a>
+  <a href="#">Séries</a>
+  <a href="#">Filmes</a>
+  <a class="is-active" href="#">Animes</a>
+  <a href="#">Games</a>
+</nav>
+
     </header>
 
     <main>
@@ -473,6 +563,25 @@
       </p>
     </div>
   </footer>
+  <script>
+    const topbar = document.querySelector('.topbar');
+    const btn = document.querySelector('.hamburger');
+
+  btn.addEventListener('click', () => {
+    const isOpen = topbar.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', String(isOpen));
+    btn.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+  });
+
+  // Opcional: fechar ao clicar em um link do menu mobile
+  document.querySelectorAll('.mobile-nav a').forEach(a => {
+    a.addEventListener('click', () => {
+      topbar.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Abrir menu');
+    });
+  });
+  </script>
 </body>
     
 </html>
